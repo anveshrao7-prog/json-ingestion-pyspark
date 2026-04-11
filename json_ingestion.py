@@ -22,3 +22,5 @@ flat_df = df.select(
 flat_df.show(5,False)
 
 #flat_df.write.mode("overwrite").parquet("output/json_flattened")
+
+
