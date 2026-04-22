@@ -36,8 +36,14 @@ for c in cols:
         lit(total_count).alias("total_record_count"),
         count(when(col(c).isNull(), 1)).alias("null_record_count"),
         lit(total_count).alias("source_record_count"),
-        (lit(total_count) - countDistinct(col(c))).alias("duplicate_count")
+        (lit(total_count) - countDistinct(col(c))).alias("duplicate_count"),
+
+        when(count(when(col(c).isNull(), 1)) == 0, "TRUE")
+            .otherwise("FALSE").alias("is_mandatory"),
+        when((lit(total_count) - countDistinct(col(c))) > 0, "YES")
+            .otherwise("NO").alias("is_duplicate")
     )
+    
     dfs.append(df)
 
 profile_df = dfs[0]
